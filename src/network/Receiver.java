@@ -2,11 +2,14 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Receiver {
 
     Database db;
+    List<Socket> socketsList=new ArrayList<>();
 
     public Receiver() {
         db = new Database();
@@ -26,9 +29,11 @@ public class Receiver {
             ServerSocket server = new ServerSocket(Integer.parseInt(port));
 
             boolean isRunning = true;
+
             while (isRunning) {
                 Socket socket = server.accept();
-                Thread clientThread = new Thread(new Client(socket, db));
+                socketsList.add(socket);
+                Thread clientThread = new Thread(new Client(socket, db,socketsList));
                 clientThread.start();
             }
 

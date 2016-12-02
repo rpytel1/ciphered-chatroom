@@ -19,21 +19,23 @@ public class Client implements Runnable {
     }
 
     public void run() {
-        try {
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
+       while(true) {
+           try {
+               in = new DataInputStream(socket.getInputStream());
+               out = new DataOutputStream(socket.getOutputStream());
 
-            String command = in.readUTF();
-            handleCommand(command);
+               String command = in.readUTF();
+               System.out.println(command);
+               handleCommand(command);
 
-            //out.close();
-            //in.close();
-            //socket.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+               //out.close();
+               //in.close();
+               //socket.close();
+           } catch (IOException ioe) {
+               ioe.printStackTrace();
+           }
 
-
+       }
     }
 
     private void handleCommand(String command) throws IOException {
@@ -46,7 +48,7 @@ public class Client implements Runnable {
                 break;
             case "LOGIN":
                 loginUser();
-                sendMessage();
+              //  sendMessage();
               //  out.close();
                // in.close();
                // socket.close();

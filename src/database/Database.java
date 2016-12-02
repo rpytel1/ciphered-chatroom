@@ -1,7 +1,3 @@
-package database;
-
-import network.FileRecord;
-
 import java.sql.*;
 import java.util.Vector;
 
@@ -147,42 +143,7 @@ public class Database {
         return exist;
     }
 
-    /**
-     * inserts into database information of the specific file that user has sent to the server
-     * @returns file's ID from DB
-     */
-    public int insertFileData(String username, FileRecord fileRecord){
 
-        try {
-            String sql = "INSERT INTO "+username+" (FileName, FilePath, Size, Checksum) VALUES (?,?,?,?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, fileRecord.getName());
-            preparedStatement.setString(2, fileRecord.getPath());
-            preparedStatement.setLong(3, fileRecord.getSize());
-            preparedStatement.setString(4, fileRecord.getChecksum());
-
-            preparedStatement.execute();
-            connection.commit();
-            System.out.println("User data inserted successfully");
-
-
-            sql = "SELECT id FROM "+username+" WHERE FileName=? AND FilePath=? AND Size=? AND Checksum=?";
-            preparedStatement = connection.prepareStatement(sql);
-
-            preparedStatement.setString(1, fileRecord.getName());
-            preparedStatement.setString(2, fileRecord.getPath());
-            preparedStatement.setLong(3,fileRecord.getSize());
-            preparedStatement.setString(4, fileRecord.getChecksum());
-            ResultSet rs = preparedStatement.executeQuery();
-            connection.commit();
-
-            return rs.getInt(1);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     /**
      * method that reads rows from the specific table
@@ -232,21 +193,21 @@ public class Database {
      * @param ID unique ID of the file to get
      * @return table with file data
      */
-    public String[] getFile(String tableName, int ID){
-        String[] fileData = new String[5];
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from " + tableName +" where ID='"+ID+"';");
-
-
-                for(int i =1;i<=5;i++) {
-                    fileData[i-1] = (resultSet.getString(i));
-                }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return fileData;
-    }
+//    public String[] getFile(String tableName, int ID){
+//        String[] fileData = new String[5];
+//        try {
+//            Statement statement = connection.createStatement();
+//            ResultSet resultSet = statement.executeQuery("select * from " + tableName +" where ID='"+ID+"';");
+//
+//
+//                for(int i =1;i<=5;i++) {
+//                    fileData[i-1] = (resultSet.getString(i));
+//                }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return fileData;
+//    }
 
 }

@@ -2,16 +2,19 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class Client implements Runnable {
     Socket socket;
     Database db;
     DataInputStream in;
     DataOutputStream out;
+    List<Socket> socketList;
 
-    public Client(Socket clientSocket, Database db) {
+    public Client(Socket clientSocket, Database db, List socketList) {
         socket = clientSocket;
         this.db = db;
+        this.socketList=socketList;
 
     }
 
@@ -37,17 +40,33 @@ public class Client implements Runnable {
         switch (command) {
             case "REGISTER":
                 registerUser();
-                out.close();
-                in.close();
-                socket.close();
+           //    out.close();
+             //   in.close();
+             //   socket.close();
                 break;
             case "LOGIN":
                 loginUser();
-                out.close();
-                in.close();
-                socket.close();
+                sendMessage();
+              //  out.close();
+               // in.close();
+               // socket.close();
                 break;
+            case "MESSAGE":
+                sendMessage();
+                break;
+
         }
+    }
+
+    private void sendMessage() throws IOException {
+        String  message=in.readUTF();
+        System.out.println(message);
+        for(Socket sock :socketList){
+            DataOutputStream dos=new DataOutputStream(sock.getOutputStream());
+            dos.writeUTF(message);
+        }
+        //broadcast bez przprzedzającej wiadomosći
+
     }
 
     private void registerUser() throws IOException {

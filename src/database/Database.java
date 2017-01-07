@@ -54,34 +54,6 @@ public class Database {
 
     }
 
-    /**
-     * creates table of the specific user with files data
-     * @param login login of the specific user
-     */
-    public void createUserTable(String login) {
-        Statement statement = null;
-
-        try {
-            statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        String sql = "create table if not exists " + login + "('ID' integer primary key autoincrement,'FileName' text,'FilePath' text,'Size' text,'Checksum' text);";
-
-        try {
-            assert statement != null;
-            statement.executeUpdate(sql);
-            System.out.println("Created user database successfully");
-            statement.close();
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 
     /**
      * handles process of registration of the user, adds user row to the logins and passwords table
@@ -136,78 +108,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        if(exist==true){
-                createUserTable(username);
-        }
         return exist;
     }
-
-
-
-    /**
-     * method that reads rows from the specific table
-     * @param tableName table name to read from
-     * @return vector of string data
-     */
-    public Vector<Vector<String>> getTableRows(String tableName){
-        Vector<Vector<String>> rowsVector = new Vector<>();
-        try {
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from " + tableName +" ;");
-            ResultSetMetaData rsmd = resultSet.getMetaData();
-            int columnNumber = rsmd.getColumnCount();
-
-            while (resultSet.next()){
-                Vector<String> tmp = new Vector<>();
-                for(int i =1;i<=columnNumber;i++){
-                    tmp.add(resultSet.getString(i));
-                }
-                rowsVector.add(tmp);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return rowsVector;
-    }
-
-    /**
-     * deletes specified rows from the specified log
-     * @param tableName name of the table
-     * @param ID id of the file to delete
-     */
-    public void deleteFile( String tableName, int ID){
-        try {
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("delete from " + tableName + " where ID='" + ID +"';");
-            connection.commit();
-        } catch (SQLException e) {
-            //e.printStackTrace();
-        }
-    }
-
-    /**
-     * gets data of the file using table name and unique ID of this file
-     * @param tableName table name of the specific user
-     * @param ID unique ID of the file to get
-     * @return table with file data
-     */
-//    public String[] getFile(String tableName, int ID){
-//        String[] fileData = new String[5];
-//        try {
-//            Statement statement = connection.createStatement();
-//            ResultSet resultSet = statement.executeQuery("select * from " + tableName +" where ID='"+ID+"';");
-//
-//
-//                for(int i =1;i<=5;i++) {
-//                    fileData[i-1] = (resultSet.getString(i));
-//                }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return fileData;
-//    }
-
 }

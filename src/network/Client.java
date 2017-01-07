@@ -68,8 +68,10 @@ public class Client implements Runnable {
         String  message=in.readUTF();
         System.out.println(message);
         for(Socket sock :socketList){
-            DataOutputStream dos=new DataOutputStream(sock.getOutputStream());
-            dos.writeUTF(message);
+            if(!sock.equals(socket)) {
+                DataOutputStream dos = new DataOutputStream(sock.getOutputStream());
+                dos.writeUTF(message);
+            }
         }
         //broadcast bez przprzedzającej wiadomosći
 

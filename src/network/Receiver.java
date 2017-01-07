@@ -10,7 +10,9 @@ public class Receiver {
 
     Database db;
     List<Socket> socketsList=new ArrayList<>();
-
+    List<Client> clientList=new ArrayList<>();
+    int currentUserNumber=0;
+    int requiredUserNumber=2;
     public Receiver() {
         db = new Database();
 
@@ -33,6 +35,7 @@ public class Receiver {
             while (isRunning) {
                 Socket socket = server.accept();
                 socketsList.add(socket);
+
                 Thread clientThread = new Thread(new Client(socket, db,socketsList));
                 clientThread.start();
             }

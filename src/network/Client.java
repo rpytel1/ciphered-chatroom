@@ -10,16 +10,18 @@ public class Client implements Runnable {
     DataInputStream in;
     DataOutputStream out;
     List<Socket> socketList;
+    boolean exitError=true;
+    int requiredUserNumber=2;
+
 
     public Client(Socket clientSocket, Database db, List socketList) {
         socket = clientSocket;
         this.db = db;
         this.socketList=socketList;
-
     }
 
     public void run() {
-       while(true) {
+       while(exitError) {
            try {
                in = new DataInputStream(socket.getInputStream());
                out = new DataOutputStream(socket.getOutputStream());
@@ -33,6 +35,7 @@ public class Client implements Runnable {
                //socket.close();
            } catch (IOException ioe) {
                ioe.printStackTrace();
+               exitError=false;
            }
 
        }
@@ -48,6 +51,7 @@ public class Client implements Runnable {
                 break;
             case "LOGIN":
                 loginUser();
+
               //  sendMessage();
               //  out.close();
                // in.close();
@@ -89,6 +93,14 @@ public class Client implements Runnable {
 
         if (db.loginUser(login, password)) {
             out.writeUTF("LOG_IN");
+
+            if(socketList.size()==requiredUserNumber)
+            {
+                for(Socket sock :socketList){
+                    DataOutputStream dos=new DataOutputStream(sock.getOutputStream());
+                    dos.writeUTF("startKeyDistribution");
+                }
+            }
         } else {
             out.writeUTF("LOGIN_ERROR");
         }

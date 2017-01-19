@@ -11,7 +11,7 @@ public class Client implements Runnable {
     DataOutputStream out;
     List<Socket> socketList;
     boolean exitError=true;
-    int requiredUserNumber=2;
+    int requiredUserNumber=3;
 
 
     public Client(Socket clientSocket, Database db, List socketList) {
@@ -34,7 +34,7 @@ public class Client implements Runnable {
                //in.close();
                //socket.close();
            } catch (IOException ioe) {
-               ioe.printStackTrace();
+               //ioe.printStackTrace();
                exitError=false;
            }
 

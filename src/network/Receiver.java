@@ -12,7 +12,7 @@ public class Receiver {
     List<Socket> socketsList=new ArrayList<>();
     List<Client> clientList=new ArrayList<>();
     int currentUserNumber=0;
-    int requiredUserNumber=2;
+    int requiredUserNumber=3;
     public Receiver() {
         db = new Database();
 
